@@ -99,9 +99,9 @@ func TestRegistry_RejectsDuplicateRouteName(t *testing.T) {
 		t.Fatal("Register(second) expected duplicate route error")
 	}
 
-	var duplicateErr *namedrouter.DuplicateRouteParameterError
+	var duplicateErr *namedrouter.RouteAlreadyExistsError
 	if !errors.As(err, &duplicateErr) {
-		t.Fatalf("Register(second) expected DuplicateRouteParameterError, got %T", err)
+		t.Fatalf("Register(second) expected RouterAlreadyExistsError, got %T", err)
 	}
 }
 
