@@ -20,6 +20,8 @@ type Adapter interface {
 	Use(middlewares ...Middleware)
 	Static(pattern, root string)
 
+	URLParam(r *http.Request, key string) string
+
 	ParameterParser() ParameterParser
 	ParameterApplier() ParameterApplier
 
@@ -50,6 +52,8 @@ type NamedRouter interface {
 
 	URL(name string, params RouteParams) (string, error)
 	MustURL(name string, params RouteParams) string
+
+	URLParam(r *http.Request, key string) string
 
 	Walk()
 }
@@ -225,4 +229,9 @@ func (n *namedRouter) Use(middlewares ...Middleware) {
 // Static serves static files from the specified root directory for the given pattern.
 func (n *namedRouter) Static(pattern, root string) {
 	n.adapter.Static(pattern, root)
+}
+
+// URLParam retrieves the value of a URL parameter from the request using the adapter's URLParam method.
+func (n *namedRouter) URLParam(r *http.Request, key string) string {
+	return n.adapter.URLParam(r, key)
 }

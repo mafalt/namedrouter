@@ -114,6 +114,13 @@ func (a *testAdapter) Use(middlewares ...namedrouter.Middleware) {
 func (a *testAdapter) Static(pattern, root string) {
 }
 
+func (a *testAdapter) URLParam(r *http.Request, key string) string {
+	if r == nil || key == "" {
+		return ""
+	}
+	return r.URL.Query().Get(key)
+}
+
 func (a *testAdapter) Walk() {
 }
 

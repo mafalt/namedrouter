@@ -317,6 +317,35 @@ func TestNamedRouter_MustURL_Panic(t *testing.T) {
 	nr.MustURL("nonexistent.route", nil)
 }
 
+func TestNamedRouter_URLParam_DelegatesToAdapter(t *testing.T) {
+	nr := newNamedRouter()
+	req := httptest.NewRequest("GET", "/users?id=42", nil)
+
+	value := nr.URLParam(req, "id")
+	if value != "42" {
+		t.Fatalf("Expected URLParam to return '42', got %q", value)
+	}
+}
+
+func TestNamedRouter_URLParam_UnknownKeyReturnsEmptyString(t *testing.T) {
+	nr := newNamedRouter()
+	req := httptest.NewRequest("GET", "/users?id=42", nil)
+
+	value := nr.URLParam(req, "missing")
+	if value != "" {
+		t.Fatalf("Expected URLParam to return empty string for unknown key, got %q", value)
+	}
+}
+
+func TestNamedRouter_URLParam_NilRequestReturnsEmptyString(t *testing.T) {
+	nr := newNamedRouter()
+
+	value := nr.URLParam(nil, "id")
+	if value != "" {
+		t.Fatalf("Expected URLParam to return empty string for nil request, got %q", value)
+	}
+}
+
 func TestNamedRouter_Subrouter(t *testing.T) {
 	nr := newNamedRouter()
 
